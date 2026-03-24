@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/18116c28-dbaf-42d0-a77a-43eacd521f99" /># Stellar Event Ticketing System (Soroban)
+# Stellar Event Ticketing System (Soroban)
 
 A decentralized smart contract built on **Stellar Soroban** to manage event ticket sales securely and transparently.
 
