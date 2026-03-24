@@ -1,4 +1,4 @@
-# Stellar Event Ticketing System (Soroban)
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/18116c28-dbaf-42d0-a77a-43eacd521f99" /># Stellar Event Ticketing System (Soroban)
 
 A decentralized smart contract built on **Stellar Soroban** to manage event ticket sales securely and transparently.
 
@@ -21,6 +21,7 @@ This contract acts as an automated "Box Office."
 * **Auth Verification:** Uses Soroban's `require_auth` to ensure only the actual wallet owner can purchase tickets.
 
 ## Deployed Smart Contract Link
+
 **Network:** Testnet  
 **Contract ID:** `https://stellar.expert/explorer/testnet/contract/CBKU7DSQCOYLRRVBDQWQWYFJHSCWVIAZUJ2B47NQWTBLVMINNNMRFAKM`  
-**Stellar Expert Link:** [https://stellar.expert/explorer/testnet/contract/XXX](https://stellar.expert/explorer/testnet/contract/XXX)
+**Stellar Expert Link:** [https://stellar.expert/explorer/testnet/contract/XXX](https://stellar.expert/explorer/testnet/contract/CBKU7DSQCOYLRRVBDQWQWYFJHSCWVIAZUJ2B47NQWTBLVMINNNMRFAKM)
