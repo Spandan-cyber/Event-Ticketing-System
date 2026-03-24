@@ -4,6 +4,7 @@ A decentralized smart contract built on **Stellar Soroban** to manage event tick
 
 ## Project Description
 The **Event Ticketing System** is a Rust-based smart contract designed to handle the primary sale of event tickets. By leveraging Stellar's low-cost and high-speed network, it ensures that ticket issuance is immutable and verifiable, preventing double-selling and manual bookkeeping errors.
+
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f9525f73-5d38-436a-a485-de2779ff30d4" />
 
 
