@@ -19,5 +19,5 @@ This contract acts as an automated "Box Office."
 
 ## Deployed Smart Contract Link
 **Network:** Testnet  
-**Contract ID:** `CD... (Replace with your deployed ID)`  
+**Contract ID:** `https://stellar.expert/explorer/testnet/tx/7163004722360320#7163004722360321`  
 **Stellar Expert Link:** [https://stellar.expert/explorer/testnet/contract/XXX](https://stellar.expert/explorer/testnet/contract/XXX)
