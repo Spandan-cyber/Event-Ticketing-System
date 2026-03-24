@@ -24,4 +24,4 @@ This contract acts as an automated "Box Office."
 
 **Network:** Testnet  
 **Contract ID:** `https://stellar.expert/explorer/testnet/contract/CBKU7DSQCOYLRRVBDQWQWYFJHSCWVIAZUJ2B47NQWTBLVMINNNMRFAKM`  
-**Stellar Expert Link:** [https://stellar.expert/explorer/testnet/contract/XXX](https://stellar.expert/explorer/testnet/contract/CBKU7DSQCOYLRRVBDQWQWYFJHSCWVIAZUJ2B47NQWTBLVMINNNMRFAKM)
+**Stellar Expert Link:** [https://stellar.expert/explorer/testnet/contract/CBKU7DSQCOYLRRVBDQWQWYFJHSCWVIAZUJ2B47NQWTBLVMINNNMRFAKM](https://stellar.expert/explorer/testnet/contract/CBKU7DSQCOYLRRVBDQWQWYFJHSCWVIAZUJ2B47NQWTBLVMINNNMRFAKM)
