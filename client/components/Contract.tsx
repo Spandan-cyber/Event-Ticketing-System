@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
-  addProduct,
-  updateProductStatus,
-  getProduct,
+  initializeEvent,
+  buyTicket,
+  getRemainingTickets,
   CONTRACT_ADDRESS,
 } from "@/hooks/contract";
 import { AnimatedCard } from "@/components/ui/animated-card";
@@ -128,7 +128,7 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string; border: string;
 
 // ── Main Component ───────────────────────────────────────────
 
-type Tab = "track" | "add" | "update";
+type Tab = "buy" | "info";
 
 interface ContractUIProps {
   walletAddress: string | null;
@@ -137,91 +137,54 @@ interface ContractUIProps {
 }
 
 export default function ContractUI({ walletAddress, onConnect, isConnecting }: ContractUIProps) {
-  const [activeTab, setActiveTab] = useState<Tab>("track");
+  const [activeTab, setActiveTab] = useState<Tab>("buy");
   const [error, setError] = useState<string | null>(null);
   const [txStatus, setTxStatus] = useState<string | null>(null);
 
-  const [addId, setAddId] = useState("");
-  const [addOrigin, setAddOrigin] = useState("");
-  const [isAdding, setIsAdding] = useState(false);
-
-  const [updateId, setUpdateId] = useState("");
-  const [updateStatusVal, setUpdateStatusVal] = useState("");
-  const [isUpdating, setIsUpdating] = useState(false);
-
-  const [trackId, setTrackId] = useState("");
-  const [isTracking, setIsTracking] = useState(false);
-  const [productData, setProductData] = useState<Record<string, string> | null>(null);
+  const [isBuying, setIsBuying] = useState(false);
+  const [remainingTickets, setRemainingTickets] = useState<number | null>(null);
+  const [isLoadingRemaining, setIsLoadingRemaining] = useState(false);
 
   const truncate = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 
-  const handleAddProduct = useCallback(async () => {
+  const handleBuyTicket = useCallback(async () => {
     if (!walletAddress) return setError("Connect wallet first");
-    if (!addId.trim() || !addOrigin.trim()) return setError("Fill in all fields");
     setError(null);
-    setIsAdding(true);
+    setIsBuying(true);
     setTxStatus("Awaiting signature...");
     try {
-      await addProduct(walletAddress, addId.trim(), addOrigin.trim());
-      setTxStatus("Product registered on-chain!");
-      setAddId("");
-      setAddOrigin("");
+      await buyTicket(walletAddress, walletAddress);
+      setTxStatus("Ticket purchased successfully!");
+      // Refresh remaining tickets
+      refreshRemaining();
       setTimeout(() => setTxStatus(null), 5000);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Transaction failed");
       setTxStatus(null);
     } finally {
-      setIsAdding(false);
+      setIsBuying(false);
     }
-  }, [walletAddress, addId, addOrigin]);
+  }, [walletAddress]);
 
-  const handleUpdateStatus = useCallback(async () => {
-    if (!walletAddress) return setError("Connect wallet first");
-    if (!updateId.trim() || !updateStatusVal.trim()) return setError("Fill in all fields");
-    setError(null);
-    setIsUpdating(true);
-    setTxStatus("Awaiting signature...");
+  const refreshRemaining = useCallback(async () => {
+    setIsLoadingRemaining(true);
     try {
-      await updateProductStatus(walletAddress, updateId.trim(), updateStatusVal.trim());
-      setTxStatus("Status updated on-chain!");
-      setUpdateId("");
-      setUpdateStatusVal("");
-      setTimeout(() => setTxStatus(null), 5000);
+      const result = await getRemainingTickets(walletAddress || undefined);
+      setRemainingTickets(result as number);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Transaction failed");
-      setTxStatus(null);
+      console.error("Failed to load remaining tickets:", err);
     } finally {
-      setIsUpdating(false);
+      setIsLoadingRemaining(false);
     }
-  }, [walletAddress, updateId, updateStatusVal]);
+  }, [walletAddress]);
 
-  const handleTrackProduct = useCallback(async () => {
-    if (!trackId.trim()) return setError("Enter a product ID");
-    setError(null);
-    setIsTracking(true);
-    setProductData(null);
-    try {
-      const result = await getProduct(trackId.trim(), walletAddress || undefined);
-      if (result && typeof result === "object") {
-        const mapped: Record<string, string> = {};
-        for (const [k, v] of Object.entries(result)) {
-          mapped[String(k)] = String(v);
-        }
-        setProductData(mapped);
-      } else {
-        setError("Product not found");
-      }
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Query failed");
-    } finally {
-      setIsTracking(false);
-    }
-  }, [trackId, walletAddress]);
+  useEffect(() => {
+    refreshRemaining();
+  }, [refreshRemaining]);
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode; color: string }[] = [
-    { key: "track", label: "Track", icon: <SearchIcon />, color: "#4fc3f7" },
-    { key: "add", label: "Register", icon: <PackageIcon />, color: "#7c6cf0" },
-    { key: "update", label: "Update", icon: <RefreshIcon />, color: "#fbbf24" },
+    { key: "buy", label: "Buy Ticket", icon: <TicketIcon />, color: "#34d399" },
+    { key: "info", label: "Event Info", icon: <InfoIcon />, color: "#7c6cf0" },
   ];
 
   return (

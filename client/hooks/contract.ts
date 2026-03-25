@@ -26,7 +26,7 @@ import {
 
 /** Your deployed Soroban contract ID */
 export const CONTRACT_ADDRESS =
-  "CDJVMAX34YRCQ5JFC6SIOQOVSUY6XWEFYJOLF3SBCKU7CMI3IAP6HPWN";
+  "CDGVT4OAUVKLJR544DWQWTNTQLD2OJ52PAVY4JSTYN2O26SKU6O67W5G";
 
 /** Network passphrase (testnet by default) */
 export const NETWORK_PASSPHRASE = Networks.TESTNET;
@@ -212,57 +212,52 @@ export function toScValBool(value: boolean): xdr.ScVal {
 }
 
 // ============================================================
-// Supply Chain Tracker — Contract Methods
+// Event Ticketing System — Contract Methods
 // ============================================================
 
 /**
- * Add a product to the supply chain.
- * Calls: add_product(product_id: String, origin: String)
+ * Initialize the event with admin, token, price, and supply.
+ * Calls: initialize(admin: Address, token: Address, price: i128, supply: u32)
  */
-export async function addProduct(
+export async function initializeEvent(
   caller: string,
-  productId: string,
-  origin: string
+  admin: string,
+  token: string,
+  price: bigint,
+  supply: number
 ) {
   return callContract(
-    "add_product",
-    [toScValString(productId), toScValString(origin)],
+    "initialize",
+    [
+      toScValAddress(admin),
+      toScValAddress(token),
+      toScValI128(price),
+      toScValU32(supply),
+    ],
     caller,
     true
   );
 }
 
 /**
- * Update a product's status.
- * Calls: update_status(product_id: String, new_status: String)
+ * Buy a ticket for the event.
+ * Calls: buy_ticket(buyer: Address)
  */
-export async function updateProductStatus(
-  caller: string,
-  productId: string,
-  newStatus: string
-) {
+export async function buyTicket(caller: string, buyer: string) {
   return callContract(
-    "update_status",
-    [toScValString(productId), toScValString(newStatus)],
+    "buy_ticket",
+    [toScValAddress(buyer)],
     caller,
     true
   );
 }
 
 /**
- * Get product details (read-only).
- * Calls: get_product(product_id: String) -> Map<Symbol, String>
- * Returns: { origin: string, status: string } or null
+ * Get remaining tickets (read-only).
+ * Calls: get_remaining() -> u32
  */
-export async function getProduct(
-  productId: string,
-  caller?: string
-) {
-  return readContract(
-    "get_product",
-    [toScValString(productId)],
-    caller
-  );
+export async function getRemainingTickets(caller?: string) {
+  return readContract("get_remaining", [], caller);
 }
 
 export { nativeToScVal, scValToNative, Address, xdr };
